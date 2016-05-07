@@ -5,6 +5,9 @@
 #include <monograph/rect.h>
 
 
+struct mg_canvas;
+
+
 struct mg_box {
     struct mg_rect rect;
     char *title;
@@ -16,6 +19,9 @@ mg_box_alloc(struct mg_rect const *rect, char const *title);
 
 void
 mg_box_free(struct mg_box *box);
+
+void
+mg_box_draw(struct mg_box const *box, struct mg_canvas *canvas);
 
 
 #endif

@@ -3,6 +3,8 @@
 
 
 #include <monograph/box.h>
+#include <monograph/canvas.h>
+#include <monograph/graph.h>
 #include <monograph/point.h>
 #include <monograph/rect.h>
 #include <monograph/size.h>
