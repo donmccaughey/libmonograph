@@ -19,37 +19,11 @@ mg_rect_make(struct mg_point point, struct mg_size size)
     return (struct mg_rect){ .point=point, .size=size };
 }
 
+char *
+mg_rect_alloc_string(struct mg_rect const *rect, int *length);
 
-inline bool
-mg_rect_is_top_left(struct mg_rect const *rect, struct mg_point point)
-{
-    return rect->point.x == point.x
-        && rect->point.y == point.y;
-}
-
-
-inline bool
-mg_rect_is_top_right(struct mg_rect const *rect, struct mg_point point)
-{
-    return rect->point.x + rect->size.width - 1 == point.x
-        && rect->point.y == point.y;
-}
-
-
-inline bool
-mg_rect_is_bottom_left(struct mg_rect const *rect, struct mg_point point)
-{
-    return rect->point.x == point.x
-        && rect->point.y + rect->size.height - 1 == point.y;
-}
-
-
-inline bool
-mg_rect_is_bottom_right(struct mg_rect const *rect, struct mg_point point)
-{
-    return rect->point.x + rect->size.width - 1 == point.x
-        && rect->point.y + rect->size.height - 1 == point.y;
-}
+int
+mg_rect_from_string(char const *s, struct mg_rect *rect, int *length);
 
 
 #endif
