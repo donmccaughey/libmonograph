@@ -23,6 +23,12 @@ mg_box_free(struct mg_box *box);
 void
 mg_box_draw(struct mg_box const *box, struct mg_canvas *canvas);
 
+char *
+mg_box_alloc_string(struct mg_box const *box, int *length);
+
+struct mg_box *
+mg_box_alloc_from_string(char const *s, int *length);
+
 
 #endif
 

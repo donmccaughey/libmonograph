@@ -1,7 +1,10 @@
 #include "box.h"
 
 #include <assert.h>
+#include <ctype.h>
+#include <errno.h>
 #include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -23,6 +26,19 @@ mg_box_alloc(struct mg_rect const *rect, char const *title)
     }
 
     return box;
+}
+
+
+char *
+mg_box_alloc_string(struct mg_box const *box, int *length)
+{
+    char *rect_string = mg_rect_alloc_string(&box->rect, NULL);
+    if (!rect_string) return NULL;
+    char *s;
+    int chars_printed = asprintf(&s, "box %s %s\n", rect_string, box->title);
+    free(rect_string);
+    if (length) *length = chars_printed;
+    return s;
 }
 
 
@@ -95,5 +111,56 @@ mg_box_free(struct mg_box *box)
     if (!box) return;
     free(box->title);
     free(box);
+}
+
+
+struct mg_box *
+mg_box_alloc_from_string(char const *s, int *length)
+{
+    assert(s);
+    if (!s) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    int prefix_length = 0;
+    int count = sscanf(s, " box%n", &prefix_length);
+    if (count != 0) return NULL;
+    s += prefix_length;
+
+    struct mg_box *box = calloc(1, sizeof(struct mg_box));
+    if (!box) return NULL;
+    
+    int rect_length = 0;
+    int result = mg_rect_from_string(s, &box->rect, &rect_length);
+    if (result == -1) {
+        mg_box_free(box);
+        return NULL;
+    }
+    s += rect_length;
+
+    int leading_space_length = 0;
+    count = sscanf(s, " %n", &leading_space_length);
+    if (count != 0) {
+        mg_box_free(box);
+        return NULL;
+    }
+    s += leading_space_length;
+
+    char *title_start = s;
+    size_t length_to_end = strcspn(title_start, "\n");
+    size_t title_length = length_to_end;
+    int newline_length = title_start[title_length] ? 1 : 0;
+
+    while (isspace(title_start[title_length - 1])) --title_length; 
+    box->title = strndup(title_start, title_length);
+    if (!box->title) {
+        mg_box_free(box);
+        return NULL;
+    }
+
+    if (length) *length = prefix_length + rect_length
+        + leading_space_length + length_to_end + newline_length;
+    return box;
 }
 
