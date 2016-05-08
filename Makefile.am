@@ -24,9 +24,8 @@ LDADD = $(lib_LIBRARIES)
 check_PROGRAMS = test/box_test \
 				 test/canvas_test \
 				 test/graph_test \
+				 test/point_test \
 				 test/rect_test
 
 TESTS = $(check_PROGRAMS)
-
-
 
