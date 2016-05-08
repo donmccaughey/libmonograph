@@ -77,12 +77,69 @@ test_draw(void)
 }
 
 
+static void
+test_alloc_string(void)
+{
+    struct mg_graph *graph = mg_graph_alloc();
+    struct mg_rect rect = mg_rect_make(mg_point_make(1, 2), mg_size_make(7, 3));
+    struct mg_box *box = mg_box_alloc(&rect, "box 1");
+    mg_graph_add(graph, box);
+
+    rect = mg_rect_make(mg_point_make(3, 4), mg_size_make(9, 4));
+    box = mg_box_alloc(&rect, "box 2");
+    mg_graph_add(graph, box);
+
+    int length = 0;
+    char *s = mg_graph_alloc_string(graph, &length);
+    assert(s);
+    char const expected_s[] =
+        "monograph 0.1\n"
+        "box (1, 2) 7x3 box 1\n"
+        "box (3, 4) 9x4 box 2\n"
+        ;
+    assert(strcmp(s, expected_s) == 0);
+
+    free(s);
+    mg_graph_free(graph);
+}
+
+
+static void
+test_alloc_from_string(void)
+{
+    char const s[] = 
+        " monograph\t 0.1 \n"
+        "  box (1,2)7x3 box 1 \n"
+        "box( 3 , 4 ) 9 x 4 box 2\n"
+        " "
+        ;
+    int length = 0;
+    struct mg_graph *graph = mg_graph_alloc_from_string(s, &length);
+    assert(graph);
+    assert(graph->boxes_count == 2);
+    
+    assert(graph->boxes[0]->rect.point.x == 1);
+    assert(graph->boxes[0]->rect.point.y == 2);
+    assert(graph->boxes[0]->rect.size.width == 7);
+    assert(graph->boxes[0]->rect.size.height == 3);
+
+    assert(graph->boxes[1]->rect.point.x == 3);
+    assert(graph->boxes[1]->rect.point.y == 4);
+    assert(graph->boxes[1]->rect.size.width == 9);
+    assert(graph->boxes[1]->rect.size.height == 4);
+    
+    mg_graph_free(graph);
+}
+
+
 int
 main(int argc, char *argv[])
 {
     test_alloc();
     test_add();
     test_draw();
+    test_alloc_string();
+    test_alloc_from_string();
     return EXIT_SUCCESS;
 }
 
