@@ -4,6 +4,8 @@
 
 #include <monograph/monograph.h>
 
+#include "config.h"
+
 
 static void
 test_alloc(void)
@@ -122,12 +124,35 @@ test_alloc_from_string(void)
     assert(graph->boxes[0]->rect.point.y == 2);
     assert(graph->boxes[0]->rect.size.width == 7);
     assert(graph->boxes[0]->rect.size.height == 3);
+    assert(strcmp(graph->boxes[0]->title, "box 1") == 0);
 
     assert(graph->boxes[1]->rect.point.x == 3);
     assert(graph->boxes[1]->rect.point.y == 4);
     assert(graph->boxes[1]->rect.size.width == 9);
     assert(graph->boxes[1]->rect.size.height == 4);
+    assert(strcmp(graph->boxes[1]->title, "box 2") == 0);
     
+    mg_graph_free(graph);
+}
+
+
+static void
+test_alloc_from_file(void)
+{
+    char const path[] = TEST_DATA_DIR "/test1.monograph";
+    struct mg_graph *graph = mg_graph_alloc_from_file(path);
+    assert(graph);
+    assert(graph->boxes_count == 3);
+
+    assert(graph->boxes[0]->rect.point.x == 4);
+    assert(strcmp(graph->boxes[0]->title, "box 1") == 0);
+
+    assert(graph->boxes[1]->rect.point.x == 8);
+    assert(strcmp(graph->boxes[1]->title, "box 2") == 0);
+
+    assert(graph->boxes[2]->rect.point.x == 12);
+    assert(strcmp(graph->boxes[2]->title, "box 3") == 0);
+
     mg_graph_free(graph);
 }
 
@@ -140,6 +165,7 @@ main(int argc, char *argv[])
     test_draw();
     test_alloc_string();
     test_alloc_from_string();
+    test_alloc_from_file();
     return EXIT_SUCCESS;
 }
 

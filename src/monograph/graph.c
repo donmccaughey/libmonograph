@@ -2,11 +2,16 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
+#include <sys/mman.h>
+#include <sys/stat.h>
 
 #include "box.h"
 #include "config.h"
@@ -29,6 +34,42 @@ mg_graph_alloc(void)
 
 
 struct mg_graph *
+mg_graph_alloc_from_file(char const *path)
+{
+    assert(path);
+    if (!path || !path[0]) {
+        errno = EINVAL;
+        return NULL;
+    }
+
+    struct stat status;
+    int result = stat(path, &status);
+    if (-1 == result) return NULL;
+    
+    int fd = open(path, O_RDONLY);
+    if (-1 == fd) return NULL;
+
+    char *file = mmap(NULL, status.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    if (file == MAP_FAILED) {
+        result = close(fd);
+        assert(result != -1);
+        return NULL;
+    }
+
+    int length;
+    struct mg_graph *graph = mg_graph_alloc_from_string(file, &length);
+
+    result = munmap(file, status.st_size);
+    assert(result != -1);
+
+    result = close(fd);
+    assert(result != -1);
+
+    return graph;
+}
+
+
+struct mg_graph * 
 mg_graph_alloc_from_string(char const *s, int *length)
 {
     assert(s);

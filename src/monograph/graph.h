@@ -30,6 +30,9 @@ mg_graph_alloc_string(struct mg_graph const *graph, int *length);
 struct mg_graph *
 mg_graph_alloc_from_string(char const *s, int *length);
 
+struct mg_graph *
+mg_graph_alloc_from_file(char const *path);
+
 
 #endif
 

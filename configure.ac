@@ -7,8 +7,9 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.14 foreign subdir-objects -Wall -Werror])
 
-AC_CONFIG_SRCDIR([src/monograph/box.c])
+AC_CONFIG_SRCDIR([src/monograph/graph.c])
 AC_CONFIG_HEADERS([src/monograph/config.h])
+AC_DEFINE_UNQUOTED([TEST_DATA_DIR], ["$srcdir/test/data"], [Location of test data files.])
 
 # Checks for programs.
 AM_PROG_AR

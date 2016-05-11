@@ -28,5 +28,8 @@ check_PROGRAMS = test/box_test \
 				 test/rect_test \
 				 test/size_test
 
+testdatadir = test/data
+dist_testdata_DATA = test/data/test1.monograph
+
 TESTS = $(check_PROGRAMS)
 
