@@ -120,7 +120,7 @@ mg_box_alloc_from_string(char const *s, int *length)
     assert(s);
     if (!s) {
         errno = EINVAL;
-        return -1;
+        return NULL;
     }
 
     int prefix_length = 0;
@@ -147,7 +147,7 @@ mg_box_alloc_from_string(char const *s, int *length)
     }
     s += leading_space_length;
 
-    char *title_start = s;
+    char const *title_start = s;
     size_t length_to_end = strcspn(title_start, "\n");
     size_t title_length = length_to_end;
     int newline_length = title_start[title_length] ? 1 : 0;
