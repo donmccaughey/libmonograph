@@ -1,5 +1,3 @@
-EXTRA_DIST = LICENSE README.md
-
 monographdir = $(includedir)/monograph
 monograph_HEADERS = src/monograph/monograph.h \
 					src/monograph/box.h \
@@ -28,8 +26,9 @@ check_PROGRAMS = test/box_test \
 				 test/rect_test \
 				 test/size_test
 
-testdatadir = test/data
-dist_testdata_DATA = test/data/test1.monograph
+test_data = test/data/test1.monograph
 
 TESTS = $(check_PROGRAMS)
+
+EXTRA_DIST = LICENSE README.md $(test_data)
 
