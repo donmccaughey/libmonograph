@@ -164,7 +164,8 @@ mg_graph_alloc_string(struct mg_graph const *graph, int *length)
         s1 += lengths[i];
     }
     *s1 = '\0';
-
+    
+    if (length) *length = total_length;
     return s;
 }
 
@@ -202,5 +203,32 @@ mg_graph_draw(struct mg_graph const *graph, struct mg_canvas *canvas)
     for (int i = 0; i < graph->boxes_count; ++i) {
         mg_box_draw(graph->boxes[i], canvas);
     }
+}
+
+
+int
+mg_graph_write_file(struct mg_graph const *graph, char const *path)
+{
+    assert(graph);
+    assert(path);
+    if (!graph || !path) {
+        errno = EINVAL;
+        return -1;
+    }
+    
+    FILE *f = fopen(path, "w");
+    if (!f) return -1;
+
+    int length;
+    char *s = mg_graph_alloc_string(graph, &length);
+    if (!s) return -1;
+
+    int chars_printed = fwrite(s, sizeof(char), (size_t)length, f);
+    free(s);
+    int result = fclose(f);
+    assert(result != EOF);
+    if (chars_printed == -1) return -1;
+
+    return 0;
 }
 

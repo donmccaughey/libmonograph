@@ -1,6 +1,8 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <monograph/monograph.h>
 
@@ -100,6 +102,7 @@ test_alloc_string(void)
         "box (3, 4) 9x4 box 2\n"
         ;
     assert(strcmp(s, expected_s) == 0);
+    assert(length == 56);
 
     free(s);
     mg_graph_free(graph);
@@ -157,6 +160,44 @@ test_alloc_from_file(void)
 }
 
 
+static void
+test_write_file(void)
+{
+    char const s[] = 
+        "monograph 0.1\n"
+        "box (0, 0) 7x3 box 1\n"
+        "box (4, 4) 9x5 box 2\n"
+        ;
+    struct mg_graph *graph = mg_graph_alloc_from_string(s, NULL);
+    assert(graph);
+
+    char const path[] = "test_write_file.monograph";
+    int result = mg_graph_write_file(graph, path);
+    assert(result != -1);
+
+    free(graph);
+
+    char buffer[80];
+    FILE *f = fopen(path, "r");
+    assert(f);
+
+    char *line = fgets(buffer, sizeof buffer, f);
+    assert(strcmp(line, "monograph 0.1\n") == 0);
+    
+    line = fgets(buffer, sizeof buffer, f);
+    assert(strcmp(line, "box (0, 0) 7x3 box 1\n") == 0);
+    
+    line = fgets(buffer, sizeof buffer, f);
+    assert(strcmp(line, "box (4, 4) 9x5 box 2\n") == 0);
+    
+    line = fgets(buffer, sizeof buffer, f);
+    assert(line == NULL);
+
+    fclose(f);
+    unlink(path);
+}
+
+
 int
 main(int argc, char *argv[])
 {
@@ -166,6 +207,7 @@ main(int argc, char *argv[])
     test_alloc_string();
     test_alloc_from_string();
     test_alloc_from_file();
+    test_write_file();
     return EXIT_SUCCESS;
 }
 
