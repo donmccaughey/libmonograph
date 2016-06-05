@@ -8,6 +8,7 @@ build-aux
 config.h.in
 configure
 Makefile.in
+project.xcworkspace
 tmp
 xcuserdata
 

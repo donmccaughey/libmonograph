@@ -30,5 +30,9 @@ test_data = test/data/test1.monograph
 
 TESTS = $(check_PROGRAMS)
 
-EXTRA_DIST = LICENSE README.md $(test_data)
+xcode_files = configure_for_xcode.mk \
+			  libmonograph.xcodeproj/project.pbxproj \
+			  src/monograph/Info.plist
+
+EXTRA_DIST = LICENSE README.md $(test_data) $(xcode_files)
 
