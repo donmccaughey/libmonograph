@@ -48,8 +48,11 @@ mg_graph_alloc_from_file(char const *path)
     
     int fd = open(path, O_RDONLY);
     if (-1 == fd) return NULL;
-
-    char *file = mmap(NULL, status.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    
+    assert(status.st_size >= 0);
+    assert(status.st_size < SIZE_MAX);
+    size_t file_size = (size_t)status.st_size;
+    char *file = mmap(NULL, file_size, PROT_READ, MAP_SHARED, fd, 0);
     if (file == MAP_FAILED) {
         result = close(fd);
         assert(result != -1);
@@ -59,7 +62,7 @@ mg_graph_alloc_from_file(char const *path)
     int length;
     struct mg_graph *graph = mg_graph_alloc_from_string(file, &length);
 
-    result = munmap(file, status.st_size);
+    result = munmap(file, file_size);
     assert(result != -1);
 
     result = close(fd);
