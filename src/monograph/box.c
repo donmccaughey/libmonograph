@@ -149,6 +149,11 @@ mg_box_alloc_from_string(char const *s, int *length)
 
     char const *title_start = s;
     size_t length_to_end = strcspn(title_start, "\n");
+    if (length_to_end > INT_MAX) {
+        errno = ERANGE;
+        mg_box_free(box);
+        return NULL;
+    }
     size_t title_length = length_to_end;
     int newline_length = title_start[title_length] ? 1 : 0;
 
@@ -160,7 +165,7 @@ mg_box_alloc_from_string(char const *s, int *length)
     }
 
     if (length) *length = prefix_length + rect_length
-        + leading_space_length + length_to_end + newline_length;
+        + leading_space_length + (int)length_to_end + newline_length;
     return box;
 }
 
