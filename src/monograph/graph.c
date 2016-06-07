@@ -225,12 +225,13 @@ mg_graph_write_file(struct mg_graph const *graph, char const *path)
     int length;
     char *s = mg_graph_alloc_string(graph, &length);
     if (!s) return -1;
-
-    int chars_printed = fwrite(s, sizeof(char), (size_t)length, f);
+    
+    size_t chars_to_write = (size_t)length;
+    size_t chars_written = fwrite(s, sizeof(char), chars_to_write, f);
     free(s);
     int result = fclose(f);
     assert(result != EOF);
-    if (chars_printed == -1) return -1;
+    if (chars_written != chars_to_write) return -1;
 
     return 0;
 }
