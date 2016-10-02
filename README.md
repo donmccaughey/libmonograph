@@ -32,6 +32,8 @@ Other ASCII Diagramming Software
     diagram editor written in Perl, using GTK.
  - [graph-easy](http://search.cpan.org/~tels/Graph-Easy/bin/graph-easy), 
     render/convert graphs in/from various formats
+ - [Ascii to SVG](https://ivanceras.github.io/elm-examples/elm-bot-lines/), 
+    ASCII to SVG. Source is at [ivanceras/elm-examples](https://github.com/ivanceras/elm-examples),
 
 Other Diagram Generators
 ------------------------
