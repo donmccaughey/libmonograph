@@ -34,6 +34,8 @@ Other ASCII Diagramming Software
     render/convert graphs in/from various formats
  - [Ascii to SVG](https://ivanceras.github.io/elm-examples/elm-bot-lines/), 
     ASCII to SVG. Source is at [ivanceras/elm-examples](https://github.com/ivanceras/elm-examples),
+ - [Monodraw](https://monodraw.helftone.com/), commercial ASCII art editor
+    application for the Mac 
 
 Other Diagram Generators
 ------------------------
