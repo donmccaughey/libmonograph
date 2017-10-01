@@ -3,6 +3,7 @@ libmonograph
 
 A C library for creating diagrams for fixed-width character output.
 
+[![Build Status](https://travis-ci.org/donmccaughey/libmonograph.svg?branch=master)](https://travis-ci.org/donmccaughey/libmonograph.svg?branch=master)
 
 License
 -------
