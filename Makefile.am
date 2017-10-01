@@ -1,3 +1,6 @@
+AM_CPPFLAGS = -D_POSIX_C_SOURCE -I$(srcdir)/src
+AM_CFLAGS = -std=c99
+
 monographdir = $(includedir)/monograph
 monograph_HEADERS = src/monograph/monograph.h \
 					src/monograph/box.h \
@@ -7,8 +10,6 @@ monograph_HEADERS = src/monograph/monograph.h \
 					src/monograph/rect.h \
 					src/monograph/size.h
 
-AM_CPPFLAGS = -I$(srcdir)/src
-AM_CFLAGS = -std=c99
 lib_LIBRARIES = libmonograph.a
 libmonograph_a_SOURCES = $(monograph_HEADERS) \
 						 src/monograph/box.c \
