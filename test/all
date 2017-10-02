@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+build_dir=${1:-./cmake-build-debug}
+if [ ! -d "$build_dir" ]
+then
+    printf "ERROR: Build directory '%s' does not exist.\n" "$build_dir" 1>&2
+    exit 2
+fi
+
+cd $build_dir
+
+./box_test
+./canvas_test
+./graph_test
+./point_test
+./rect_test
+./size_test
