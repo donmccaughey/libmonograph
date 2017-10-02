@@ -1,5 +1,5 @@
-AM_CPPFLAGS = -D_GNU_SOURCE \
-			  -D_POSIX_C_SOURCE \
+AM_CPPFLAGS = -D_BSD_SOURCE \
+              -D_GNU_SOURCE \
 			  -I$(srcdir)/src
 AM_CFLAGS = -std=c99
 
